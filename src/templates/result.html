@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+
+<body>
+ 
+
+  <h1 class="mb-4 text-4xl font-extrabold text-gray-800 text-center">Final Result</h1>
+  
+
+
+<div class="flex justify-around border rounded-lg shadow-md bg-gray-50 border-2 border-gray-100 mx-auto w-[1200px]" style="width: 1200px;
+justify-content: space-around;
+padding: 20px;">
+<div class="flex bg-white border rounded-lg shadow-md md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 ">
+  <figure class="figure relative  transition-all duration-300 cursor-pointer filter grayscale-0 hover:grayscale w-[400px]">
+    <a href="#">
+      <img class="rounded-lg figure-img img-thumbnail input-image" src="data:image/png;base64, {{result.get("image")}}" alt="image description" style="object-fit:cover; height:100%; margin-right:30px;">
+    </a>
+    <figcaption class="absolute bottom-6 px-4 text-lg text-white">
+      <p>Prediction: <b>{{result.get("class")}}</b></p>
+    </figcatpion>
+  </figure>
+  <div class="max-w-[600px] relative shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                  Lesion type
+                </th>
+                <th scope="col" class="py-3 px-6">
+                  Confidence 
+                </th>
+               
+            </tr>
+        </thead>
+        <tbody>
+      
+          {%for i in range(0, 7)%}
+  
+        
+          <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+            <th id=key-{{i}} scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {{result.get("probs")[i][0]}}</th>
+              <td id=val-{{i}} class="py-4 px-6">{{result.get("probs")[i][1]}}</td>
+           
+          </tr>
+          {%endfor%}
+       
+        </tbody>
+    </table>
+  </div>
+</div>
+<div>
+  <div class=" ml-[30px] bg-white border rounded-lg shadow-md  " >
+
+    <canvas height="400" width="400" id="myChart"></canvas>
+  </div>
+  </div>
+  
+ 
+  
+   
+  
+   
+</div>
+
+
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+    
+      labels: [document.getElementById('key-0').textContent,
+      document.getElementById('key-1').textContent,
+      document.getElementById('key-2').textContent, 
+      document.getElementById('key-3').textContent, 
+      document.getElementById('key-4').textContent,
+      document.getElementById('key-5').textContent, 
+      document.getElementById('key-6').textContent],
+      datasets: [{
+        label: 'Confidence',
+
+        
+        data: [parseFloat(document.getElementById('val-0').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-1').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-2').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-3').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-4').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-5').textContent.substring(0,4)),
+        parseFloat(document.getElementById('val-6').textContent.substring(0,4))],
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+
+</html>
+
+{% endblock %}
